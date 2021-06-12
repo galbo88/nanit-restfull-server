@@ -4,12 +4,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.example.hackernews.model.Content;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class PostRepository {
@@ -21,10 +19,20 @@ public class PostRepository {
         this.dynamoDBMapper = dynamoDBMapper;
     }
 
-    @RequestMapping(value = "/content",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+
     public List<Content> getAll() {
         return dynamoDBMapper.scan(Content.class, new DynamoDBScanExpression());
     }
+
+
+    public Content getById(String contentId) {
+        return dynamoDBMapper.load(Content.class, contentId);
+    }
+
+    public String postContent(String content) {
+        Content newContent = new Content(UUID.randomUUID().toString(), content);
+        dynamoDBMapper.save(newContent);
+        return newContent.getContentId();
+    }
+
 }
