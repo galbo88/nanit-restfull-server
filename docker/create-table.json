@@ -1,0 +1,13 @@
+{
+  "TableName": "Posts",
+  "KeySchema": [
+    { "AttributeName": "contentId", "KeyType": "HASH" }
+  ],
+  "AttributeDefinitions": [
+    { "AttributeName": "contentId", "AttributeType": "S" }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
